@@ -4,9 +4,8 @@ description: <<-DESC
                                 The Smartech Flutter Plugin enables your Flutter app to use all of the features.
                               DESC
 version: 1.0.0
-author: Netcore Solutions
 homepage: https://netcoresmartech.com
-documentation_url: 'https://docs.netcoresmartech.com/'
+documentation: 'https://docs.netcoresmartech.com/'
 license: { :type => "Commercial", :file => "LICENSE"}
 repository: https://github.com/NetcoreSolutions/Smartech-Flutter-Plugin.git
 
