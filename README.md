@@ -8,7 +8,7 @@ Smartech is a omni channel platform that delivers everything you need to drive m
 ## Developer Docs
 To get started please refer to our developer docs to know how to make use of our Plugin to track Events and User Attributes, How to implement Push Notification and How to show In-App Messages.
 
-[Developer Docs](https://docs.netcoresmartech.com/docs/flutter-basic-setup)
+[Developer Docs](https://docs.netcoresmartech.com/docs/flutter-sdk-integration)
 
 
 ## Support
