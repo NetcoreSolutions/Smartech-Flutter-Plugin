@@ -46,13 +46,23 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
 
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "smartech_plugin")
-    channel.setMethodCallHandler(this)
-    smartech = Smartech.getInstance(WeakReference(flutterPluginBinding.applicationContext))
-    smartechHTMLlistener = SmartechHTMLlistener()
+    setupPlugin(flutterPluginBinding,null)
 
    // initialBackgroundService()
 
+  }
+
+  fun setupPlugin(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding?,registrar: PluginRegistry.Registrar?) {
+
+    if (registrar != null) {
+      channel = MethodChannel(registrar?.messenger(), "smartech_plugin")
+    } else {
+      channel = MethodChannel(flutterPluginBinding?.binaryMessenger, "smartech_plugin")
+    }
+
+    channel.setMethodCallHandler(this)
+    smartech = Smartech.getInstance(WeakReference(context))
+    smartechHTMLlistener = SmartechHTMLlistener()
   }
 
   fun initialBackgroundService() {
@@ -457,6 +467,12 @@ activity = binding.activity
       fun trackAppUpdate() {
         Smartech.getInstance(WeakReference(context)).trackAppUpdate()
 
+    }
+
+    @JvmStatic
+    fun  registerWith(registrar: PluginRegistry.Registrar){
+      val smartechPlugin = SmartechPlugin()
+      smartechPlugin.setupPlugin(null,registrar)
     }
 
   }
