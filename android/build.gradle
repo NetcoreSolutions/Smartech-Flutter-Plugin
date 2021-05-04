@@ -19,7 +19,7 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'http://artifacts.hansel.io/artifactory/android' }
+       maven { url 'http://artifacts.hansel.io/artifactory/android' }
     }
 }
 
@@ -39,6 +39,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.netcore.android:smartech-sdk:3.1.5'
+    implementation 'com.netcore.android:smartech-sdk:3.1.7'
     implementation 'androidx.work:work-runtime-ktx:2.5.0'
 }
