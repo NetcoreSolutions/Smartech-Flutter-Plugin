@@ -30,7 +30,7 @@ class DeeplinkReceivers:BroadcastReceiver() {
             } else {
                 Log.v("Activity", "does not have custom payload.")
             }
-
+            SmartechPlugin.context.getSharedPreferences("Deeplink_action", Context.MODE_PRIVATE).edit().putString("deepLinkUrl", link).putString("payload", payload).apply()
             deeplinkReceiverCallBack?.invoke(link,payload)
         }
     }

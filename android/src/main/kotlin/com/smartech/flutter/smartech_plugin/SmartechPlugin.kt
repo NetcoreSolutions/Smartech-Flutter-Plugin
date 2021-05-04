@@ -430,7 +430,7 @@ activity = binding.activity
 
 
 
-    private lateinit var context: Context
+    lateinit var context: Context
     var DRAWABLE = "drawable"
     val deeplinkReceiver = DeeplinkReceivers()
     val filter = IntentFilter("com.smartech.EVENT_PN_INBOX_CLICK")
