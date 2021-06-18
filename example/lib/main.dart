@@ -18,31 +18,12 @@ void main() async {
     await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
-  SmartechPlugin()
-      .handleDeeplinkAction((String link, Map<dynamic, dynamic> map) {
-    if (Platform.isAndroid) {
-      if (link.isEmpty) {
-        return;
-      }
-      if (link.contains('http')) {
-        showDialog(
-            context: Globle().context,
-            builder: (builder) => AlertDialog(
-                  title: Text(link),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(Globle().context).pop();
-                          SmartechPlugin().openUrl(link);
-                        },
-                        child: Text("Ok"))
-                  ],
-                ));
-      } else {
-        Navigator.of(Globle().context)
-            .push(MaterialPageRoute(builder: (builder) => ProfilePage()));
-      }
-    } else {
+  SmartechPlugin().handleDeeplinkAction(
+      (String link, Map<dynamic, dynamic> map, bool isAfterTerminated) {
+    if (link.isEmpty) {
+      return;
+    }
+    if (link.contains('http')) {
       showDialog(
           context: Globle().context,
           builder: (builder) => AlertDialog(
@@ -51,10 +32,14 @@ void main() async {
                   TextButton(
                       onPressed: () {
                         Navigator.of(Globle().context).pop();
+                        SmartechPlugin().openUrl(link);
                       },
                       child: Text("Ok"))
                 ],
               ));
+    } else {
+      Navigator.of(Globle().context)
+          .push(MaterialPageRoute(builder: (builder) => ProfilePage()));
     }
   });
 

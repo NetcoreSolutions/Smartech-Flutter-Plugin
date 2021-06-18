@@ -18,9 +18,22 @@ public class SwiftSmartechPlugin: NSObject, FlutterPlugin {
    public static func handleDeeplinkAction(withURLString deeplinkURLString: String, andCustomPayload customPayload: [AnyHashable : Any]?) {
         let dict = [
             "deeplinkURL" : deeplinkURLString,
-            "customPayload":customPayload ?? [:]
+            "customPayload":customPayload ?? [:],
+            "isAfterTerminated":false
         ] as [String : Any]
-        channel?.invokeMethod("onhandleDeeplinkAction", arguments: dict)
+   
+    channel?.invokeMethod("onhandleDeeplinkAction", arguments: dict, result: { (value) in
+        let userDefault = UserDefaults.standard
+        guard let value = value else {
+            userDefault.removeObject( forKey: "DeeplinkActionData")
+            return
+        }
+        if (value is FlutterError) {
+            userDefault.set(dict, forKey: "DeeplinkActionData")
+            return
+        }
+        userDefault.set(dict,forKey: "DeeplinkActionData")
+    })
     }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -30,7 +43,7 @@ public class SwiftSmartechPlugin: NSObject, FlutterPlugin {
     case "getDevicePushToken":
         result(Smartech.sharedInstance().getDevicePushToken())
     case "getDeviceGuid":
-    result(Smartech.sharedInstance().getDeviceGuid())
+        result(Smartech.sharedInstance().getDeviceGuid())
         
     case "updateUserProfile" :
         Smartech.sharedInstance().updateUserProfile(call.arguments as! Dictionary<AnyHashable, Any>)
@@ -39,6 +52,7 @@ public class SwiftSmartechPlugin: NSObject, FlutterPlugin {
         Smartech.sharedInstance().setUserIdentity(call.arguments as! String)
     case "getUserIdentity":
         result(Smartech.sharedInstance().getUserIdentity())
+        
     case "login":
         Smartech.sharedInstance().login(call.arguments as! String)
     case "clearUserIdentity":
@@ -73,6 +87,15 @@ public class SwiftSmartechPlugin: NSObject, FlutterPlugin {
         result(Smartech.sharedInstance().getDeviceGuid())
     case "openNativeWebView":
         SwiftSmartechPlugin.openNativeWebView?()
+    case "onhandleDeeplinkActionBackground":
+        let userDefault = UserDefaults.standard
+        guard let dict = userDefault.dictionary(forKey: "DeeplinkActionData") else {
+            return
+        }
+        var dictionary = dict;
+        dictionary["isAfterTerminated"] = true
+        SwiftSmartechPlugin.channel?.invokeMethod("onhandleDeeplinkAction", arguments: dict)
+        userDefault.removeObject(forKey: "DeeplinkActionData")
     default:
         
         print("Not Implemant")

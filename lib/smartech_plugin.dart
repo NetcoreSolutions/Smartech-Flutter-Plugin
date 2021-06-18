@@ -81,14 +81,17 @@ class SmartechPlugin {
         break;
       case "onhandleDeeplinkAction":
         Map<dynamic, dynamic> map;
+        bool isAfterTerminated = false;
         if (call.arguments["customPayload"] is String) {
           try {
             map = json.decode(call.arguments["customPayload"]);
           } catch (e) {}
         } else {
+          isAfterTerminated = call.arguments["isAfterTerminated"] as bool;
           map = call.arguments["customPayload"] as Map<dynamic, dynamic>;
         }
-        _onhandleDeeplinkAction(call.arguments["deeplinkURL"] as dynamic, map);
+        _onhandleDeeplinkAction(
+            call.arguments["deeplinkURL"] as dynamic, map, isAfterTerminated);
         break;
     }
   }
