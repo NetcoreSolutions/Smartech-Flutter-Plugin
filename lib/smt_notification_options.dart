@@ -1,9 +1,9 @@
 class SMTNotificationOptions {
-  String smallIconTransparentId;
-  String largeIconId;
-  String placeHolderIcon;
-  String smallIconId;
-  String transparentIconBgColor;
+  String? smallIconTransparentId;
+  String? largeIconId;
+  String? placeHolderIcon;
+  String? smallIconId;
+  String? transparentIconBgColor;
   SMTNotificationOptions(
       {this.smallIconTransparentId,
       this.largeIconId,

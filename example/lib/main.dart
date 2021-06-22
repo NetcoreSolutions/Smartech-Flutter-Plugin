@@ -1,11 +1,10 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartech_flutter_plugin/smartech_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,9 +17,8 @@ void main() async {
     await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
-  SmartechPlugin().handleDeeplinkAction(
-      (String link, Map<dynamic, dynamic> map, bool isAfterTerminated) {
-    if (link.isEmpty) {
+  SmartechPlugin().handleDeeplinkAction((String? link, Map<dynamic, dynamic>? map, bool? isAfterTerminated) {
+    if (link == null || link.isEmpty) {
       return;
     }
     if (link.contains('http')) {
@@ -38,8 +36,7 @@ void main() async {
                 ],
               ));
     } else {
-      Navigator.of(Globle().context)
-          .push(MaterialPageRoute(builder: (builder) => ProfilePage()));
+      Navigator.of(Globle().context).push(MaterialPageRoute(builder: (builder) => ProfilePage()));
     }
   });
 
@@ -47,8 +44,7 @@ void main() async {
   getLocation();
 }
 
-void launchURL(String url) async =>
-    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+void launchURL(String url) async => await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
 getLocation() async {
   Location location = new Location();
@@ -87,7 +83,7 @@ class MyApp extends StatefulWidget {
   State<StatefulWidget> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -116,7 +112,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<void> customHTMLCallback(Map<String, dynamic> payload) async {
+  Future<void> customHTMLCallback(Map<String, dynamic>? payload) async {
     print(payload);
   }
 
@@ -133,24 +129,14 @@ class _MyAppState extends State<MyApp> {
     }
 
     FirebaseMessaging.onMessage.listen((event) {
-      if (event != null) {
-        if (event.data != null) {
-          SmartechPlugin().handlePushNotification(event.data.toString());
-        }
-      }
+      SmartechPlugin().handlePushNotification(event.data.toString());
     });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      if (event != null) {
-        if (event.data != null) {
-          SmartechPlugin().handlePushNotification(event.data.toString());
-        }
-      }
+      SmartechPlugin().handlePushNotification(event.data.toString());
     });
     FirebaseMessaging.instance.getInitialMessage().then((event) {
       if (event != null) {
-        if (event.data != null) {
-          SmartechPlugin().handlePushNotification(event.data.toString());
-        }
+        SmartechPlugin().handlePushNotification(event.data.toString());
       }
     });
   }
@@ -180,5 +166,5 @@ class Globle {
   }
 
   Globle._internal();
-  BuildContext context;
+  late BuildContext context;
 }

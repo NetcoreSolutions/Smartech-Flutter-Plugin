@@ -8,8 +8,8 @@ import 'package:smartech_flutter_plugin/smt_notification_options.dart';
 
 class SmartechPlugin {
   static const MethodChannel _channel = const MethodChannel('smartech_plugin');
-  static CustomHTMLCallback _customHTMLCallback;
-  static OnhandleDeeplinkAction _onhandleDeeplinkAction;
+  static late CustomHTMLCallback _customHTMLCallback;
+  static late OnhandleDeeplinkAction _onhandleDeeplinkAction;
 
   static final SmartechPlugin _smartechPlugin = new SmartechPlugin._internal();
 
@@ -19,8 +19,8 @@ class SmartechPlugin {
     _channel.setMethodCallHandler(_didRecieveTranscript);
   }
 
-  Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
+  Future<String?> get platformVersion async {
+    final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
 
@@ -28,14 +28,14 @@ class SmartechPlugin {
     await _channel.invokeMethod('openUrl', url);
   }
 
-  Future<String> setDevicePushToken(String token) async {
-    final String message =
+  Future<String?> setDevicePushToken(String token) async {
+    final String? message =
         await _channel.invokeMethod('setDevicePushToken', token);
     return message;
   }
 
-  Future<String> get fetchAlreadyGeneratedTokenFromFCM async {
-    final String message =
+  Future<String?> get fetchAlreadyGeneratedTokenFromFCM async {
+    final String? message =
         await _channel.invokeMethod('fetchAlreadyGeneratedTokenFromFCM');
     return message;
   }
@@ -76,19 +76,19 @@ class SmartechPlugin {
   Future<void> _didRecieveTranscript(MethodCall call) async {
     switch (call.method) {
       case "customHTMLCallback":
-        final Map<String, dynamic> arguments = call.arguments;
+        final Map<String, dynamic>? arguments = call.arguments;
         _customHTMLCallback(arguments);
         break;
       case "onhandleDeeplinkAction":
-        Map<dynamic, dynamic> map;
-        bool isAfterTerminated = false;
+        Map<dynamic, dynamic>? map;
+        bool? isAfterTerminated = false;
         if (call.arguments["customPayload"] is String) {
           try {
             map = json.decode(call.arguments["customPayload"]);
           } catch (e) {}
         } else {
-          isAfterTerminated = call.arguments["isAfterTerminated"] as bool;
-          map = call.arguments["customPayload"] as Map<dynamic, dynamic>;
+          isAfterTerminated = call.arguments["isAfterTerminated"] as bool?;
+          map = call.arguments["customPayload"] as Map<dynamic, dynamic>?;
         }
         _onhandleDeeplinkAction(
             call.arguments["deeplinkURL"] as dynamic, map, isAfterTerminated);
@@ -150,7 +150,7 @@ class SmartechPlugin {
     await _channel.invokeMethod("setNotificationOptions", options.toJson());
   }
 
-  Future<String> getDeviceUniqueId() async {
+  Future<String?> getDeviceUniqueId() async {
     return await _channel.invokeMethod("getDeviceUniqueId");
   }
 
@@ -167,7 +167,7 @@ class SmartechPlugin {
     await _channel.invokeMethod("optTracking", isOpted);
   }
 
-  Future<bool> hasOptedTracking() async {
+  Future<bool?> hasOptedTracking() async {
     return await _channel.invokeMethod("hasOptedTracking");
   }
 
@@ -175,7 +175,7 @@ class SmartechPlugin {
     return await _channel.invokeMethod("optPushNotification", isOpted);
   }
 
-  Future<bool> hasOptedPushNotification() async {
+  Future<bool?> hasOptedPushNotification() async {
     return await _channel.invokeMethod("hasOptedPushNotification");
   }
 
@@ -183,19 +183,19 @@ class SmartechPlugin {
     await _channel.invokeMethod("optInAppMessage", isOpted);
   }
 
-  Future<bool> hasOptedInAppMessage() async {
+  Future<bool?> hasOptedInAppMessage() async {
     return await _channel.invokeMethod("hasOptedInAppMessage");
   }
 
-  Future<String> getUserIdentity() async {
+  Future<String?> getUserIdentity() async {
     return _channel.invokeMethod("getUserIdentity");
   }
 
-  Future<int> getInboxMessageCount(int messageTyep) async {
+  Future<int?> getInboxMessageCount(int messageTyep) async {
     return _channel.invokeMethod("getInboxMessageCount", messageTyep);
   }
 
-  Future<String> getDevicePushToken() async {
+  Future<String?> getDevicePushToken() async {
     return _channel.invokeMethod("getDevicePushToken");
   }
 

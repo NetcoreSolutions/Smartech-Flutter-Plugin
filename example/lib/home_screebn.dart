@@ -18,8 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  SliverGridDelegate gridDelegate;
-  String platformVersion = "Unkown";
+  SliverGridDelegate? gridDelegate;
+  String? platformVersion = "Unkown";
   @override
   void initState() {
     super.initState();
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         child: ElevatedButton(
                       onPressed: () async {
                         var _shp = await SharedPreferences.getInstance();
-                        String color = _shp.get("color") ?? "";
+                        String color = _shp.get("color") as String? ?? "";
                         if (color.isEmpty) {
                           var option = SMTNotificationOptions(
                               transparentIconBgColor: "#ff888888");
