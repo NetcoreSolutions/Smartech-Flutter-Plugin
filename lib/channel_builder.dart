@@ -1,10 +1,10 @@
 class SMTNotifcationChannelBuilder {
   String channelId;
   String channelName;
-  int notificationImportance;
-  String channelDescription;
-  String groupId;
-  String notificationSoundFile;
+  int? notificationImportance;
+  String? channelDescription;
+  String? groupId;
+  String? notificationSoundFile;
   SMTNotifcationChannelBuilder(this.channelId, this.channelName,
       {this.notificationImportance,
       this.channelDescription,
