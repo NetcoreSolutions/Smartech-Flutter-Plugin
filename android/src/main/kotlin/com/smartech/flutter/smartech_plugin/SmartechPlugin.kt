@@ -39,11 +39,9 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
   lateinit var channel : MethodChannel
   lateinit var mBackgroundChannel: MethodChannel
 
-    override fun onCreate() {
+  override fun onCreate() {
         super.onCreate()
     }
-
-
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     setupPlugin(flutterPluginBinding,null)
@@ -90,7 +88,6 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
       }
     }
   }
-
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
 
@@ -307,20 +304,11 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
     channel.setMethodCallHandler(null)
   }
 
-
-
-
-
-
-
-
   private  fun setInAppCustomHTMLListener() {
     val options = SMTNotificationOptions(context)
 
     smartech.setInAppCustomHTMLListener(smartechHTMLlistener)
   }
-
-
 
   private fun getIconResourceId(iconName: String) : Int {
     return context.getResources().getIdentifier(iconName, DRAWABLE, context.getPackageName())
@@ -411,8 +399,6 @@ activity = binding.activity
   private  fun login(userIdentity: String?) {
     smartech.login(userIdentity)
   }
-
-
 
   private  fun setUserLocation(payload: HashMap<String, Any>) {
 

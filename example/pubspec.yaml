@@ -19,11 +19,11 @@ dependencies:
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.
     path: ../
-  fluttertoast: ^8.0.7
-  firebase_messaging: ^10.0.2
-  shared_preferences: ^2.0.6
+  fluttertoast: ^8.0.8
+  firebase_messaging: ^11.2.5
+  shared_preferences: ^2.0.12
   location: ^4.3.0
-  url_launcher: ^6.0.7
+  url_launcher: ^6.0.18
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
