@@ -12,3 +12,7 @@
 - iOS Native SDK v3.1.4
 - Android Native SDK v3.1.4
 
+## 2.0.0
+
+### Release Notes
+- Add support for Null safety.

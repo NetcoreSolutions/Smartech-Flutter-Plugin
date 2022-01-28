@@ -6,6 +6,9 @@ documentation: 'https://docs.netcoresmartech.com/'
 license: { :type => "Commercial", :file => "LICENSE"}
 repository: https://github.com/NetcoreSolutions/Smartech-Flutter-Plugin.git
 
+false_secrets:
+  - example/**
+
 environment:
   sdk: '>=2.12.0 <3.0.0'
   flutter: ">=2.5.0"
