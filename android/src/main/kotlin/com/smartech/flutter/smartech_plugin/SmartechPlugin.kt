@@ -94,7 +94,6 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
     when (call.method) {
       "getPlatformVersion" -> {
         result.success("Android ${android.os.Build.VERSION.RELEASE}")
-
       }
 
       "setDevicePushToken" -> {
@@ -111,20 +110,22 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
       "setDebugLevel" -> {
         if (call.arguments is Int) {
           setDebugLevel(call.arguments as Int)
+          result.success(null)
         } else {
           result.error("", "level should be in int", null)
         }
       }
       "trackAppInstall" -> {
         trackAppInstall()
+        result.success(null)
       }
       "trackAppUpdate" -> {
         trackAppUpdate()
+        result.success(null)
       }
       "trackAppInstallUpdateBySmartech" -> {
-
         trackAppInstallUpdateBySmartech()
-
+        result.success(null)
       }
       "setInAppCustomHTMLListener" -> {
         setInAppCustomHTMLListener()
@@ -134,43 +135,56 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
             channel.invokeMethod("setInAppCustomHTMLListener", it)
           })
         }
+
+        result.success(null)
       }
       "handlePushNotification" -> {
         handlePushNotification(call.arguments as String)
+        result.success(null)
       }
       "createNotificationChannel" -> {
         createNotificationChannel(call.arguments as HashMap<String, Any>)
+        result.success(null)
       }
       "createNotificationChannelGroup" -> {
         createNotificationChannelGroup(call.arguments as HashMap<String, Any>)
+        result.success(null)
       }
       "deleteNotificationChannel" -> {
         deleteNotificationChannel(call.arguments as String)
+        result.success(null)
       }
       "deleteNotificationChannelGroup" -> {
         deleteNotificationChannelGroup(call.arguments as String)
+        result.success(null)
       }
       "updateUserProfile" -> {
         updateUserProfile(call.arguments as HashMap<String, Any>)
+        result.success(null)
       }
       "setUserIdentity" -> {
         setUserIdentity(call.arguments as String)
+        result.success(null)
       }
       "login" -> {
         login(call.arguments as String)
-        channel.invokeMethod("caca", "asa")
+        result.success(null)
       }
       "clearUserIdentity" -> {
         smartech.clearUserIdentity()
+        result.success(null)
       }
       "logoutAndClearUserIdentity" -> {
         smartech.logoutAndClearUserIdentity(call.arguments as Boolean)
+        result.success(null)
       }
       "trackEvent" -> {
         trackEvent(call.arguments as HashMap<String, Any>)
+        result.success(null)
       }
       "setNotificationOptions" -> {
         setNotificationOptions(call.arguments as HashMap<String, Any>)
+        result.success(null)
       }
       "getDeviceUniqueId" -> {
         val guid = smartech.getDeviceUniqueId()
@@ -178,29 +192,32 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
       }
       "setUserLocation" -> {
         setUserLocation(call.arguments as HashMap<String, Any>)
+        result.success(null)
       }
       "optTracking" -> {
         smartech.optTracking(call.arguments as Boolean)
+        result.success(null)
       }
       "hasOptedTracking" -> {
         result.success(smartech.hasOptedTracking())
       }
       "optPushNotification" -> {
         smartech.optPushNotification(call.arguments as Boolean)
+        result.success(null)
       }
       "hasOptedPushNotification" -> {
         result.success(smartech.hasOptedPushNotification())
       }
       "optInAppMessage" -> {
         smartech.optInAppMessage(call.arguments as Boolean)
-
+        result.success(null)
       }
       "hasOptedInAppMessage" -> {
         result.success(smartech.hasOptedInAppMessage())
       }
       "processEventsManually" -> {
         smartech.processEventsManually()
-
+        result.success(null)
       }
       "getUserIdentity" -> {
         result.success(smartech.getUserIdentity())
@@ -213,6 +230,7 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
       }
       "openNativeWebView" -> {
         openNativeWebView?.invoke()
+        result.success(null)
       }
       "onhandleDeeplinkAction" -> {
         DeeplinkReceivers.deeplinkReceiverCallBack = { deepLinkUrl, payload ->
@@ -249,12 +267,9 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
                 }
               })
             })
-
-
           }
-
-
         }
+        result.success(null)
       }
       "onhandleDeeplinkActionBackground" -> {
         val deeplinkUrl = context.getSharedPreferences("Deeplink_action", Context.MODE_PRIVATE).getString("deepLinkUrl", null)
@@ -288,13 +303,15 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
             })
           })
         }
+        result.success(null)
       }
       "openUrl" -> {
         openUrl?.invoke(call.arguments as String)
+        result.success(null)
       }
 
       else -> {
-        result.success("Android ${android.os.Build.VERSION.RELEASE}")
+        result.notImplemented()
       }
     }
 
