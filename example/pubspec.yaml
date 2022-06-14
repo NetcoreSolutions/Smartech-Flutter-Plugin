@@ -22,7 +22,7 @@ dependencies:
   fluttertoast: ^8.0.8
   firebase_messaging: ^11.2.5
   shared_preferences: ^2.0.12
-  location: ^4.3.0
+  location: ^4.4.0
   url_launcher: ^6.0.18
 
   # The following adds the Cupertino Icons font to your application.
