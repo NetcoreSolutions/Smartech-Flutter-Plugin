@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     getPlateform();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     SmartechPlugin().onhandleDeeplinkActionBackground();
   }
 
