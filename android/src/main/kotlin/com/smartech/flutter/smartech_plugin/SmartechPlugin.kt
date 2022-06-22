@@ -44,18 +44,18 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
     }
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    setupPlugin(flutterPluginBinding,null)
+   
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "smartech_plugin")
+    setupPlugin(null)
 
    // initialBackgroundService()
 
   }
 
-  fun setupPlugin(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding?,registrar: PluginRegistry.Registrar?) {
+  fun setupPlugin(registrar: PluginRegistry.Registrar?) {
 
     if (registrar != null) {
       channel = MethodChannel(registrar?.messenger(), "smartech_plugin")
-    } else {
-      channel = MethodChannel(flutterPluginBinding?.binaryMessenger, "smartech_plugin")
     }
 
     channel.setMethodCallHandler(this)
@@ -238,7 +238,7 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
                   Log.d("success", "success")
                 }
 
-                override fun error(code: String?, msg: String?, details: Any?) {
+                override fun error(code: String, msg: String?, details: Any?) {
                   if (msg != null) {
                     Log.d("success111", msg)
                   }
@@ -276,7 +276,7 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
                 Log.d("success", "success")
               }
 
-              override fun error(code: String?, msg: String?, details: Any?) {
+              override fun error(code: String, msg: String?, details: Any?) {
                 if (msg != null) {
                   Log.d("success111", msg)
                 }
@@ -458,7 +458,7 @@ activity = binding.activity
     @JvmStatic
     fun  registerWith(registrar: PluginRegistry.Registrar){
       val smartechPlugin = SmartechPlugin()
-      smartechPlugin.setupPlugin(null,registrar)
+      smartechPlugin.setupPlugin(registrar)
     }
 
   }
