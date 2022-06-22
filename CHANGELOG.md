@@ -16,3 +16,8 @@
 
 ### Release Notes
 - Add support for Null safety.
+
+## 2.0.1
+
+### Release Notes
+- Add support for Flutter SDK v3.0.0.
