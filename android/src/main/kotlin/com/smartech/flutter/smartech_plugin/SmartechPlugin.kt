@@ -55,7 +55,7 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
   fun setupPlugin(registrar: PluginRegistry.Registrar?) {
 
     if (registrar != null) {
-      channel = MethodChannel(registrar?.messenger(), "smartech_plugin")
+      channel = MethodChannel(registrar!!.messenger(), "smartech_plugin")
     }
 
     channel.setMethodCallHandler(this)
