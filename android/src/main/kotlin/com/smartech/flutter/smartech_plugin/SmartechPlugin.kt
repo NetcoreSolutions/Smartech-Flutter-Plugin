@@ -9,8 +9,11 @@ import android.location.LocationManager
 import android.util.Log
 import androidx.annotation.NonNull
 import com.netcore.android.Smartech
-import com.netcore.android.notification.SMTNotificationOptions
-import com.netcore.android.notification.channel.SMTNotificationChannel
+import com.netcore.android.smartechappinbox.SmartechAppInbox
+import com.netcore.android.smartechappinbox.utility.SMTAppInboxMessageType
+import com.netcore.android.smartechpush.SmartPush
+import com.netcore.android.smartechpush.notification.SMTNotificationOptions
+import com.netcore.android.smartechpush.notification.channel.SMTNotificationChannel
 import com.netcore.flutter.smartech.SmartechHTMLlistener
 import io.flutter.app.FlutterApplication
 import io.flutter.embedding.android.FlutterActivity
@@ -34,6 +37,8 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
   private  var activityBinding: ActivityPluginBinding? = null
   private  var activity:Activity? = null
   private lateinit var smartech: Smartech
+  private lateinit var smartpush: SmartPush
+  private lateinit var smartechAppInbox: SmartechAppInbox
   private  lateinit var smartechHTMLlistener: SmartechHTMLlistener
   lateinit var sBackgroundService:FlutterEngine
   lateinit var channel : MethodChannel
@@ -60,6 +65,8 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
 
     channel.setMethodCallHandler(this)
     smartech = Smartech.getInstance(WeakReference(context))
+    smartpush = SmartPush.getInstance(WeakReference(context))
+    smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
     smartechHTMLlistener = SmartechHTMLlistener()
   }
 
@@ -103,7 +110,7 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
 
       }
       "fetchAlreadyGeneratedTokenFromFCM" -> {
-        smartech.fetchAlreadyGeneratedTokenFromFCM()
+        smartpush.fetchAlreadyGeneratedTokenFromFCM()
 
         result.success("fetchAlreadyGeneratedTokenFromFCM set")
 
@@ -186,10 +193,10 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
         result.success(smartech.hasOptedTracking())
       }
       "optPushNotification" -> {
-        smartech.optPushNotification(call.arguments as Boolean)
+        smartpush.optPushNotification(call.arguments as Boolean)
       }
       "hasOptedPushNotification" -> {
-        result.success(smartech.hasOptedPushNotification())
+        result.success(smartpush.hasOptedPushNotification())
       }
       "optInAppMessage" -> {
         smartech.optInAppMessage(call.arguments as Boolean)
@@ -206,10 +213,23 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
         result.success(smartech.getUserIdentity())
       }
       "getInboxMessageCount" -> {
-        result.success(smartech.getInboxMessageCount(call.arguments as Int))
+        val index = call.arguments as Int
+        var type = SMTAppInboxMessageType.INBOX_MESSAGE
+        when (index) {
+            0 -> {
+                type = SMTAppInboxMessageType.INBOX_MESSAGE
+            }
+            1 -> {
+                type = SMTAppInboxMessageType.READ_MESSAGE
+            }
+            2 -> {
+                type = SMTAppInboxMessageType.UNREAD_MESSAGE
+            }
+        }
+        result.success(smartechAppInbox.getAppInboxMessageCount(type))
       }
       "getDevicePushToken" -> {
-        result.success(smartech.getDevicePushToken())
+        result.success(smartpush.getDevicePushToken())
       }
       "openNativeWebView" -> {
         openNativeWebView?.invoke()
@@ -305,7 +325,6 @@ class SmartechPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,Application
   }
 
   private  fun setInAppCustomHTMLListener() {
-    val options = SMTNotificationOptions(context)
 
     smartech.setInAppCustomHTMLListener(smartechHTMLlistener)
   }
@@ -337,21 +356,21 @@ activity = binding.activity
   private fun setNotificationOptions(payload: HashMap<String, Any>) {
     val option = SMTNotificationOptions(context)
     if (payload["smallIconTransparentId"] != null) {
-      option.smallIconTransparentId = getIconResourceId(payload["smallIconTransparentId"] as String)
+      option.smallIconTransparent = getIconResourceId(payload["smallIconTransparentId"] as String).toString()
     }
     if (payload["largeIconId"] != null) {
-      option.largeIconId = getIconResourceId(payload["largeIconId"] as String)
+      option.largeIcon = getIconResourceId(payload["largeIconId"] as String).toString()
     }
     if (payload["placeHolderIcon"] != null) {
-      option.placeHolderIcon = getIconResourceId(payload["placeHolderIcon"] as String)
+      option.placeHolderIcon = getIconResourceId(payload["placeHolderIcon"] as String).toString()
     }
     if (payload["smallIconId"] != null) {
-      option.smallIconId = getIconResourceId(payload["smallIconId"] as String)
+      option.smallIcon = getIconResourceId(payload["smallIconId"] as String).toString()
     }
     if (payload["transparentIconBgColor"] != null) {
       option.transparentIconBgColor = payload["transparentIconBgColor"] as String
     }
-  smartech.setNotificationOptions(option)
+  smartpush.setNotificationOptions(option)
   }
 
   private fun createNotificationChannel(payload: HashMap<String, Any>) {
@@ -372,20 +391,20 @@ activity = binding.activity
       builder.setNotificationSound(payload["Sound_File_Name"] as String)
     }
     val smtNotificationChannel: SMTNotificationChannel = builder.build()
-    smartech.createNotificationChannel(smtNotificationChannel)
+    smartpush.createNotificationChannel(smtNotificationChannel)
 
   }
 
   private fun createNotificationChannelGroup(payload: HashMap<String, Any>) {
-    smartech.createNotificationChannelGroup(payload["group_id"] as String, payload["group_name"] as String)
+    smartpush.createNotificationChannelGroup(payload["group_id"] as String, payload["group_name"] as String)
   }
 
   private fun deleteNotificationChannel(channelId: String) {
-    smartech.deleteNotificationChannel(channelId)
+    smartpush.deleteNotificationChannel(channelId)
   }
 
   private  fun deleteNotificationChannelGroup(groupId: String) {
-    smartech.deleteNotificationChannelGroup(groupId)
+    smartpush.deleteNotificationChannelGroup(groupId)
   }
 
   private fun updateUserProfile(payload: HashMap<String, Any>) {
@@ -424,7 +443,7 @@ activity = binding.activity
     var  openUrl : ((url: String?)->Unit)? = null
       lateinit var app:Application
     fun setDevicePushToken(token: String) {
-      Smartech.getInstance(WeakReference(context)).setDevicePushToken(token)
+      SmartPush.getInstance(WeakReference(context)).setDevicePushToken(token)
     }
 
     fun  initializePlugin(application: Application) {
@@ -436,7 +455,7 @@ activity = binding.activity
     }
 
     fun handlePushNotification(notificationData: String?) {
-      Smartech.getInstance(WeakReference(context)).handlePushNotification(notificationData)
+      SmartPush.getInstance(WeakReference(context)).handlePushNotification(notificationData)
     }
       fun trackAppInstallUpdateBySmartech() {
       Smartech.getInstance(WeakReference(context)).trackAppInstallUpdateBySmartech()

@@ -11,11 +11,16 @@
         android:icon="@mipmap/ic_launcher"
         android:label="smartech_demo"
         android:usesCleartextTraffic="true">
-        <activity android:name=".BaseWebView"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".WebView"
+        <activity
+            android:exported="true"
+            android:name=".BaseWebView"
             android:theme="@style/AppTheme"></activity>
         <activity
+            android:exported="true"
+            android:name=".WebView"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:exported="true"
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
