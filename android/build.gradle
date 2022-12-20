@@ -6,6 +6,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'https://artifacts.netcore.co.in/artifactory/android' }
     }
 
     dependencies {
@@ -19,6 +20,7 @@ rootProject.allprojects {
         google()
         jcenter()
         mavenCentral()
+        maven { url 'https://artifacts.netcore.co.in/artifactory/android' }
     }
 }
 
@@ -26,7 +28,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -38,6 +40,8 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.netcore.android:smartech-sdk:3.1.4'
-    implementation 'androidx.work:work-runtime-ktx:2.5.0'
+    implementation 'com.netcore.android:smartech-sdk:3.2.30'
+    implementation 'com.netcore.android:smartech-push:3.2.16'
+    implementation 'com.netcore.android:smartech-appinbox:3.2.11'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 }
